@@ -48,8 +48,8 @@ class TagAdminView(AdminMixin, BaseModelView):
 admin = Admin(app, 'FlaskApp', url='/', index_view=HomeAdminView(name='home'))
 admin.add_view(PostAdminView(Post, db.session))
 admin.add_view(TagAdminView(Tag, db.session))
-admin.add_view(BaseModelView(User, db.session))
-admin.add_view(BaseModelView(Role, db.session))
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Role, db.session))
 
 ###user manager
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
