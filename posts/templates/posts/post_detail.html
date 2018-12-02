@@ -11,17 +11,35 @@
 
 {% block content %}
     <div class="tags">
-    {% for tag in tags %}
-        <a href="{{ url_for('posts.tag_detail', slug=tag.slug) }}">
+        {% for tag in tags %}
+            <a href="{{ url_for('posts.tag_detail', slug=tag.slug) }}">
             <span class="badge badge-pill badge-success"> {{ tag.name }}</span></a>
-    {% endfor %}
+        {% endfor %}
     </div>
 
-    <div class="main-content"></div>
-    {{ post.body }}
- {% if current_user.has_role('moder') or current_user.has_role('admin') %}
+    <div class="main-content">
+        {{ post.body }}
+        <div>
+            {% if comments|count > 0 %}
+                {% for comment in comments %}
+                    <p>
+                        User: {{ comment[1].email }} <br>
+                        Comment: {{ comment[0].body }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="main-content">
+    {% if current_user.has_role('moder') or current_user.has_role('admin') %}
+        <form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}">
+            <input type="submit" value="Create comment" class="btn btn-warning">
+        </form>
+    {% endif %}
+     {% if current_user.has_role('moder') or current_user.has_role('admin') %}
 <form method="LINK" action="{{ url_for('posts.edit_post', slug=post.slug) }}">
     <input type="submit" value="Edit" class="btn btn-warning">
 </form>
         {% endif %}
+    </div>
 {% endblock %}

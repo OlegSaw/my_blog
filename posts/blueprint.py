@@ -1,9 +1,9 @@
 from flask import Blueprint
 from flask import render_template, request, redirect, url_for
 from .forms import PostForm
-from models import Post, Tag
+from models import Post, Tag, Comment, User
 from app import db
-from flask_security import login_required
+from flask_security import login_required, current_user
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
@@ -31,10 +31,9 @@ def create_post():
 @login_required
 def edit_post(slug):
 	post = Post.query.filter(Post.slug == slug).first_or_404()
-	#tag = tag = Tag.query.filter(Tag.slug == slug).first_or_404()
 	if request.method == 'POST':
 		form = PostForm(formdata=request.form, odj=post)
-		#form.populate_obj(post)
+		form.populate_obj(post)
 		#formTag = PostForm(formdata=request.form, obj=tag)
 		#formTag.populate_obj(tag)
 		db.session.commit()
@@ -44,6 +43,20 @@ def edit_post(slug):
 	form = PostForm(obj=post)
 	return render_template('posts/edit_post.html', post=post, form=form)
 
+@posts.route('/<slug>/comment/', methods=['GET', 'POST'])
+@login_required
+def create_comment(slug):
+    if request.method == 'GET':
+        return render_template('posts/create_comment.html', slug=slug)
+    if request.method == 'POST':
+        post = Post.query.filter(Post.slug == slug).first()
+        if post:
+            comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id)
+            db.session.add(comment)
+            db.session.commit()
+            return redirect(url_for('posts.post_detail', slug=slug))
+        else:
+            return '400', 400
 
 @posts.route('/')
 def index():
@@ -71,10 +84,11 @@ def index():
 
 @posts.route('<slug>')
 def post_detail(slug):
-	print(slug)
-	post = Post.query.filter(Post.slug == slug).first_or_404()
-	tags = post.tags
-	return render_template('posts/post_detail.html', post=post, tags=tags)
+    post = Post.query.filter(Post.slug == slug).first_or_404()
+    tags = post.tags
+    comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
+    return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
+
 
 @posts.route('/tag/<slug>')
 def tag_detail(slug):

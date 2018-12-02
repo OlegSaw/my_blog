@@ -78,7 +78,18 @@ class Role(db.Model, RoleMixin):
     def __repr__(self):
         return '<Role: {}>'.format(self.name)
 
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer(), primary_key=True)
+    body = db.Column(db.Text, nullable=False)
+    post_id = db.Column(db.ForeignKey('posts.id'))
+    user_id = db.Column(db.ForeignKey('users.id'))
 
+    def __init__(self, *args, **kwargs):
+        super(Comment, self).__init__(*args, **kwargs)
+
+    def __repr__(self):
+        return '<Comment body: {}, post: [], user: []>'.format(self.body, self.post_id, self.user_id)
 
 
 
