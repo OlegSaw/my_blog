@@ -14,9 +14,10 @@ def create_post():
 	if request.method == 'POST':
 		title = request.form['title']
 		body = request.form['body']
+		#tag = request.form['tag']
 
 		try:
-			post = Post(title = title, body = body)
+			post = Post(title=title, body=body)
 			db.session.add(post)
 			db.session.commit()
 		except:
@@ -30,10 +31,12 @@ def create_post():
 @login_required
 def edit_post(slug):
 	post = Post.query.filter(Post.slug == slug).first_or_404()
-
+	#tag = tag = Tag.query.filter(Tag.slug == slug).first_or_404()
 	if request.method == 'POST':
 		form = PostForm(formdata=request.form, odj=post)
-		form.populate_obj(post)
+		#form.populate_obj(post)
+		#formTag = PostForm(formdata=request.form, obj=tag)
+		#formTag.populate_obj(tag)
 		db.session.commit()
 
 		return redirect(url_for("posts.post_detail", slug=post.slug))
