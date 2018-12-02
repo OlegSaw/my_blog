@@ -45,7 +45,7 @@ class TagAdminView(AdminMixin, BaseModelView):
     form_columns = ['name', 'posts']
 
 class RoleAdminView(BaseModelView):
-    form_columns = ['name']
+    pass
 
 class UserAdminView(BaseModelView):
     pass
