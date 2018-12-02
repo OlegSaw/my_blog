@@ -75,6 +75,9 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(100), unique=True)
     discription = db.Column(db.String(255))
 
+    def __repr__(self):
+        return '<Role: {}>'.format(self.name)
+
 
 
 

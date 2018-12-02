@@ -44,11 +44,16 @@ class PostAdminView(AdminMixin, BaseModelView):
 class TagAdminView(AdminMixin, BaseModelView):
     form_columns = ['name', 'posts']
 
+class RoleAdminView(BaseModelView):
+    form_columns = ['name']
+
+class UserAdminView(BaseModelView):
+    pass
 
 admin = Admin(app, 'FlaskApp', url='/', index_view=HomeAdminView(name='home'))
 admin.add_view(PostAdminView(Post, db.session))
 admin.add_view(TagAdminView(Tag, db.session))
-admin.add_view(ModelView(User, db.session))
+admin.add_view(UserAdminView(User, db.session))
 admin.add_view(ModelView(Role, db.session))
 
 ###user manager
