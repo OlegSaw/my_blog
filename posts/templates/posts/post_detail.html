@@ -19,4 +19,9 @@
 
     <div class="main-content"></div>
     {{ post.body }}
+ {% if current_user.has_role('moder') or current_user.has_role('admin') %}
+<form method="LINK" action="{{ url_for('posts.edit_post', slug=post.slug) }}">
+    <input type="submit" value="Edit" class="btn btn-warning">
+</form>
+        {% endif %}
 {% endblock %}
