@@ -55,6 +55,7 @@ admin.add_view(PostAdminView(Post, db.session))
 admin.add_view(TagAdminView(Tag, db.session))
 admin.add_view(UserAdminView(User, db.session))
 admin.add_view(RoleAdminView(Role, db.session))
+admin.add_view(ModelView(Comment, db.session))
 
 ###user manager
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
