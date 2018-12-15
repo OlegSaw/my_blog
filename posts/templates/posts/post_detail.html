@@ -17,21 +17,23 @@
         {% endfor %}
     </div>
 
+
     <div class="main-content">
         {{ post.body }}
+    <div class="bor">
         <div>
-            {% if comments|count > 0 %}
+        <p class="sizeT"> Comments: </p>
                 {% for comment in comments %}
                     <p>
                         User: {{ comment[1].email }} <br>
                         Comment: {{ comment[0].body }}
                     </p>
                 {% endfor %}
-            {% endif %}
         </div>
     </div>
+    </div>
     <div class="main-content">
-    {% if current_user.has_role('moder') or current_user.has_role('admin') %}
+    {% if current_user.has_role('moder') or current_user.has_role('admin') or current_user.has_role('user')         %}
         <form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}">
             <input type="submit" value="Create comment" class="btn btn-warning">
         </form>

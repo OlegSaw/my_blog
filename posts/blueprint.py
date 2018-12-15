@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import render_template, request, redirect, url_for
 from .forms import PostForm
-from models import Post, Tag, Comment, User
+from models import Post, Tag, Comment, User, Role
 from app import db
 from flask_security import login_required, current_user
 
@@ -34,8 +34,6 @@ def edit_post(slug):
 	if request.method == 'POST':
 		form = PostForm(formdata=request.form, odj=post)
 		form.populate_obj(post)
-		#formTag = PostForm(formdata=request.form, obj=tag)
-		#formTag.populate_obj(tag)
 		db.session.commit()
 
 		return redirect(url_for("posts.post_detail", slug=post.slug))
@@ -49,9 +47,9 @@ def create_comment(slug):
     if request.method == 'GET':
         return render_template('posts/create_comment.html', slug=slug)
     if request.method == 'POST':
-        post = Post.query.filter(Post.slug == slug).first()
+        post = Post.query.filter(Post.slug == slug).first_or_404()
         if post:
-            comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id)
+            comment = Comment(body=request.form['body'], post_id= post.id, user_id=current_user.id)
             db.session.add(comment)
             db.session.commit()
             return redirect(url_for('posts.post_detail', slug=slug))
