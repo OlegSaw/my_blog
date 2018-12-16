@@ -12,6 +12,7 @@ def slugify(s):
 post_tags = db.Table('post_tags', db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
                      db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')))
 
+
 #Post table
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -34,6 +35,7 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post id: {}, title {},'.format(self.id, self.title)
 
+
 #Tags table
 class Tag(db.Model):
     __tablename__ = 'tags'
@@ -41,6 +43,7 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     slug = db.Column(db.String(100))
+    post_id = db.Column(db.ForeignKey('posts.id'))
 
     def __init__(self, *args, **kwargs):
         super(Tag, self).__init__(*args, **kwargs)
@@ -51,13 +54,15 @@ class Tag(db.Model):
             self.slug = slugify(self.name)
 
     def __repr__(self):
-        return '<Tag name:{}>'.format(self.name)
+        return '{}'.format(self.name)
+
 
 #users manager
 roles_users = db.Table('roles_users',
         db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
         db.Column('role_id', db.Integer(), db.ForeignKey('roles.id'))
     )
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -68,6 +73,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean())
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
 
+
 class Role(db.Model, RoleMixin):
     __tablename__ = 'roles'
 
@@ -77,6 +83,7 @@ class Role(db.Model, RoleMixin):
 
     def __repr__(self):
         return '<Role: {}>'.format(self.name)
+
 
 class Comment(db.Model):
     __tablename__ = 'comments'

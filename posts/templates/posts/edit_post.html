@@ -12,19 +12,21 @@
 {% block content %}
 
     <div class="col-md-6"  >
-  <form action ="{{ url_for('posts.edit_post', slug=post.slug) }}" method="POST">
+      <form action ="{{ url_for('posts.edit_post', slug=post.slug) }}" method="POST">
 
-  {% for field in form %}
+{#      {% for field in form %}#}
+          <div class="form-group">
+            <input class='form-control' id="title" name="title" type="text" value="{{ post.title }}"><br>
+            <textarea class='form-control' id="body" name="body">{{ post.body }}</textarea><br>
+            <input class='form-control' id="tags" name="tags" type="text" value="{{ tags }}"><br>
+{#          {{ field.label(class='control-label') }}#}
+{#          {{ field(class='form-control') }}#}
+          </div>
+{#      {% endfor %}#}
 
-      <div class="form-group">
-      {{ field.label(class='control-label') }}
-      {{ field(class='form-control') }}
-      </div>
-  {% endfor %}
+      <button type="submit" class="btn btn-warning">Update</button>
 
-  <button type="submit" class="btn btn-warning">Update</button>
-
-  </form>
+      </form>
     </div>
 {% endblock %}
 

@@ -42,7 +42,8 @@ class PostAdminView(AdminMixin, BaseModelView):
     form_columns = ['title', 'body', 'tags']
 
 class TagAdminView(AdminMixin, BaseModelView):
-    form_columns = ['name', 'posts']
+    pass
+    form_columns = ['name', 'posts', 'post_id']
 
 class RoleAdminView(ModelView):
     pass
