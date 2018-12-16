@@ -120,7 +120,6 @@ def index():
 def post_detail(slug):
     post = Post.query.filter(Post.slug == slug).first_or_404()
     tags = Tag.query.filter(Tag.post_id == post.id).all()
-    print(tags, 'hui')
     for tag in tags:
         print(tag.slug, tag.name)
     # tags = post.tags
