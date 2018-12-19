@@ -7,14 +7,17 @@
 {% block content_title %}
  <div class="offset-md-3 col-md-6" >
 {{ _('Login') }}
+
  </div>
 {% endblock %}
 
 {% block content %}
 
+
+
  <div class="offset-md-3 col-md-6" >
-    {% from "security/_macros.html" import render_field_with_errors, render_field %}
-{% include "security/_messages.html" %}
+     {% from "security/_macros.html" import render_field_with_errors, render_field %}
+        {% include "security/_messages.html" %}
 
 <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
   {{ login_user_form.hidden_tag() }}
@@ -25,6 +28,16 @@
   {{ render_field(login_user_form.submit, class="btn btn-success") }}
 </form>
 {% include "security/_menu.html" %}
+  <h1>Login with FB</h1>
+  {% for message in get_flashed_messages() %}
+            <p><b>Error</b>: {{ message }}</p>
+        {% endfor %}
+        {% if current_user.is_authenticated %}
+            <h2>Hi, {{ current_user.nickname }}!</h2>
+            <p><a href="{{ url_for('logout') }}">Logout</a></p>
+        {% else %}
+            <p align="center"><a href="{{ url_for('oauth_authorize', provider='facebook') }}"><img src="https://jenniescandles.net/wp-content/uploads/2016/02/Facebook-logo-icon-vectorcopy-big_copy-900x904.png" width="50" height="50"/></a></p>
+        {% endif %}
  </div>
 
 {% endblock %}

@@ -135,3 +135,4 @@ def tag_detail(slug):
 	print(posts)
 	# posts = tag.posts
 	return render_template('posts/tag_detail.html', tag=tag, posts=posts)
+
