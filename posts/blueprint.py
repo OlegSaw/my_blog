@@ -84,7 +84,6 @@ def edit_post(slug):
         # print(type(tags))
         tags = ','.join(str(tag) for tag in tags)
         return render_template('posts/edit_post.html', post=post, tags=tags)
-    
     else:
         return redirect(url_for("index"))
 
