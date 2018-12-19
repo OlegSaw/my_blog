@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from oauth import OAuthSignIn
+
 from flask_login import LoginManager, UserMixin, login_user, logout_user,\
     current_user
 from flask_admin import Admin, AdminIndexView
@@ -71,12 +72,6 @@ security = Security(app, user_datastore)
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-# @app.route('/logout')
-# def logout():
-#     logout_user()
-#     return redirect(url_for('index'))
-
 
 @app.route('/authorize/<provider>')
 def oauth_authorize(provider):

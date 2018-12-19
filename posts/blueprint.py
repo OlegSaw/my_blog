@@ -11,77 +11,82 @@ posts = Blueprint('posts', __name__, template_folder='templates')
 @posts.route('/create', methods=['POST', 'GET'])
 @login_required
 def create_post():
-	if request.method == 'POST':
-		title = request.form['title']
-		body = request.form['body']
-		tags = request.form['tags']
-		if tags is not None:
-			tags = tags.split(', ')
-		try:
-			post = Post(title=title, body=body)
-			db.session.add(post)
-			db.session.commit()
-		except:
-			print("Error")
-		try:
-			for tag in tags:
-				new_tag = Tag(post_id=post.id, name=tag)
-				db.session.add(new_tag)
-				db.session.commit()
+    if current_user.has_role('admin') or current_user.has_role('moder'):
+        if request.method == 'POST':
+            title = request.form['title']
+            body = request.form['body']
+            tags = request.form['tags']
+            if tags is not None:
+                tags = tags.split(', ')
+            try:
+                post = Post(title=title, body=body)
+                db.session.add(post)
+                db.session.commit()
+            except:
+                print("Error")
+            try:
+                for tag in tags:
+                    new_tag = Tag(post_id=post.id, name=tag)
+                    db.session.add(new_tag)
+                    db.session.commit()
 
-		# db.session.add(post)
-		# db.session.commit()
-		except:
-			print("Error")
-		return redirect(url_for('posts.index'))
+            # db.session.add(post)
+            # db.session.commit()
+            except:
+                print("Error")
+            return redirect(url_for('posts.index'))
 
-	form = PostForm()
-	return render_template('posts/create_post.html', form=form)
-
+        form = PostForm()
+        return render_template('posts/create_post.html', form=form)
+    else:
+        return redirect(url_for("index"))
 
 @posts.route('/<slug>/edit/', methods=['POST', 'GET'])
 @login_required
 def edit_post(slug):
-	post = Post.query.filter(Post.slug == slug).first_or_404()
-	if request.method == 'POST':
-		title = request.form['title']
-		body = request.form['body']
-		tags = request.form['tags']
-		if tags is not None:
-			tags = tags.strip().split(',')
-		current_tags = [str(tag) for tag in Tag.query.filter(Tag.post_id == post.id).all()]
-		new_tags = []
-		old_tags = []
-		for tag in current_tags:
-			if tag not in tags:
-				old_tags.append(tag)
-		post.title = title
-		post.body = body
-		db.session.commit()
-		for tag in tags:
-			if len(tag) == 0:
-				continue
-			if tag.strip() not in current_tags:
-				new_tags.append(tag.strip())
-		for old_tag in old_tags:
-			print(old_tag)
-			Tag.query.filter(Tag.name == old_tag, Tag.post_id == post.id).delete()
-			db.session.commit()
-		if new_tags:
-			for new_tag in new_tags:
-				new_tag = Tag(post_id=post.id, name=new_tag)
-				db.session.add(new_tag)
-				db.session.commit()
-		return redirect(url_for("posts.post_detail", slug=post.slug))
+    if current_user.has_role('admin') or current_user.has_role('moder'):
+        post = Post.query.filter(Post.slug == slug).first_or_404()
+        if request.method == 'POST':
+            title = request.form['title']
+            body = request.form['body']
+            tags = request.form['tags']
+            if tags is not None:
+                tags = tags.strip().split(',')
+            current_tags = [str(tag) for tag in Tag.query.filter(Tag.post_id == post.id).all()]
+            new_tags = []
+            old_tags = []
+            for tag in current_tags:
+                if tag not in tags:
+                    old_tags.append(tag)
+            post.title = title
+            post.body = body
+            db.session.commit()
+            for tag in tags:
+                if len(tag) == 0:
+                    continue
+                if tag.strip() not in current_tags:
+                    new_tags.append(tag.strip())
+            for old_tag in old_tags:
+                print(old_tag)
+                Tag.query.filter(Tag.name == old_tag, Tag.post_id == post.id).delete()
+                db.session.commit()
+            if new_tags:
+                for new_tag in new_tags:
+                    new_tag = Tag(post_id=post.id, name=new_tag)
+                    db.session.add(new_tag)
+                    db.session.commit()
+            return redirect(url_for("posts.post_detail", slug=post.slug))
 
-	# form = PostForm(obj=post)
-	# for foa in form:
-	# 	print(foa)
-	tags = Tag.query.filter(Tag.post_id == post.id).all()
-	# print(type(tags))
-	tags = ','.join(str(tag) for tag in tags)
-	return render_template('posts/edit_post.html', post=post, tags=tags)
-
+        # form = PostForm(obj=post)
+        # for foa in form:
+        # 	print(foa)
+        tags = Tag.query.filter(Tag.post_id == post.id).all()
+        # print(type(tags))
+        tags = ','.join(str(tag) for tag in tags)
+        return render_template('posts/edit_post.html', post=post, tags=tags)
+    
+    else:
+        return redirect(url_for("index"))
 
 @posts.route('/<slug>/comment/', methods=['GET', 'POST'])
 @login_required

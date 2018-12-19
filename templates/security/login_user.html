@@ -32,12 +32,13 @@
   {% for message in get_flashed_messages() %}
             <p><b>Error</b>: {{ message }}</p>
         {% endfor %}
-        {% if current_user.is_authenticated %}
-            <h2>Hi, {{ current_user.nickname }}!</h2>
-            <p><a href="{{ url_for('logout') }}">Logout</a></p>
-        {% else %}
-            <p align="center"><a href="{{ url_for('oauth_authorize', provider='facebook') }}"><img src="https://jenniescandles.net/wp-content/uploads/2016/02/Facebook-logo-icon-vectorcopy-big_copy-900x904.png" width="50" height="50"/></a></p>
-        {% endif %}
+            <p align="center">
+                <a href="{{ url_for('oauth_authorize', provider='facebook') }}">
+                    <img src="https://jenniescandles.net/wp-content/uploads/2016/02/Facebook-logo-icon-vectorcopy-big_copy-900x904.png"
+                        width="50" height="50"/>
+                </a>
+            </p>
+
  </div>
 
 {% endblock %}

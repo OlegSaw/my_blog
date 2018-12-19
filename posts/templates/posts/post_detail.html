@@ -33,7 +33,7 @@
     </div>
     </div>
     <div class="main-content">
-    {% if current_user.has_role('moder') or current_user.has_role('admin') or current_user.has_role('user')         %}
+    {% if current_user.is_authenticated %}
         <form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}">
             <input type="submit" value="Create comment" class="btn btn-warning">
         </form>
