@@ -5,6 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from oauth import OAuthSignIn
 
+
 from flask_login import LoginManager, UserMixin, login_user, logout_user,\
     current_user
 from flask_admin import Admin, AdminIndexView
@@ -92,9 +93,16 @@ def oauth_callback(provider):
         return redirect(url_for('index'))
     user = User.query.filter_by(social_id=social_id).first()
     if not user:
+        # roles = Role(name='user')
         user = User(social_id=social_id, nickname=username, email=email)
+        print('asdasdasd', user)
         db.session.add(user)
         db.session.commit()
+        # user = User(social_id=social_id, nickname=username, email=email)
+        # user.roles_users.append(1)
+        # print('asdasdasd', user)
+        # db.session.add(user)
+        # db.session.commit()
     login_user(user, True)
     return redirect(url_for('index'))
 
