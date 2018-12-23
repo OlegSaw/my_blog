@@ -22,14 +22,15 @@
         {{ post.body }}
     <div class="bor">
         <div>
+{{ comments }}
         <p class="sizeT"> Comments: </p>
 
                 {% for comment in comments %}
                     <p>
                         User: {{ comment[1].email }} <br>
-                        Role: {{ comment[2] }} <br>
+                        Role: {{ comment[2]}} <br>
                         Comment: {{ comment[0].body }}
-
+{{ role_for_comment }}
 
                     </p>
                 {% endfor %}

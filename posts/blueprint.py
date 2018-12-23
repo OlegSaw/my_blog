@@ -105,7 +105,7 @@ def create_comment(slug):
         # comment = Comment.query.filter_by(role_id=1).all()
         print('eeee', )
         if post:
-            comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id, role_id=1, role_for_comment=str(current_user.roles))
+            comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id, role_for_comment=str(current_user.roles))
             db.session.add(comment)
             db.session.commit()
             return redirect(url_for('posts.post_detail', slug=slug))
@@ -138,8 +138,8 @@ def post_detail(slug):
     for tag in tags:
         print(tag.slug, tag.name)
     # tags = post.tags
-    comment_info = db.session.query(Comment, User, Role).filter(Comment.post_id == post.id, Comment.user_id == User.id,
-                                                                Comment.role_id == Role.id).all()
+    comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
+    print(comment_info)
     return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
 
 

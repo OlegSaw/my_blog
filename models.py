@@ -89,18 +89,19 @@ class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer(), primary_key=True)
     body = db.Column(db.Text, nullable=False)
+    role_for_comment = db.Column(db.String(64))
     post_id = db.Column(db.ForeignKey('posts.id'))
     user_id = db.Column(db.ForeignKey('users.id'))
-    role_id = db.Column(db.ForeignKey('roles.id'))
-    role_for_comment = db.Column(db.String(64))
-
-    def __init__(self, *args, **kwargs):
-        super(Comment, self).__init__(*args, **kwargs)
-
-    def __repr__(self):
-        return '<Comment body: {}>'.format(self.body, self.post_id, self.user_id, self.role_id)
+    # role_id = db.Column(db.ForeignKey('roles.id'))
 
 
+    # def __init__(self, *args, **kwargs):
+    #     super(Comment, self).__init__(*args, **kwargs)
+    #
+    # def __repr__(self):
+    #     return '<Comment body: {}>'.format(self.body, self.post_id, self.user_id, self.role_for_comment)
+    #
+    #
 
 
 
