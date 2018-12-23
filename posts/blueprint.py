@@ -1,9 +1,10 @@
 from flask import Blueprint
 from flask import render_template, request, redirect, url_for
 from .forms import PostForm
-from models import Post, Tag, Comment, User, Role
+from models import Post, Tag, Comment, User, Role, roles_users
 from app import db
 from flask_security import login_required, current_user
+
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
@@ -91,11 +92,20 @@ def edit_post(slug):
 @login_required
 def create_comment(slug):
     if request.method == 'GET':
+        # roles_users = Role.query.filter_by(id=current_user.id).first()
         return render_template('posts/create_comment.html', slug=slug)
     if request.method == 'POST':
         post = Post.query.filter(Post.slug == slug).first_or_404()
+        print('qweqwee111qwe', current_user.roles)
+        print('qweqwee111qwe')
+
+        # roles_user = db.session.query(User, Role).filter(User.role_id == current_user.id).all()
+            # User.query.join(User.roles).filter(User.id == current_user.id).all()
+            # Seroles_users.query.filter_by(id=current_user.id).all()
+        # comment = Comment.query.filter_by(role_id=1).all()
+        print('eeee', )
         if post:
-            comment = Comment(body=request.form['body'], post_id= post.id, user_id=current_user.id)
+            comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id, role_id=1, role_for_comment=str(current_user.roles))
             db.session.add(comment)
             db.session.commit()
             return redirect(url_for('posts.post_detail', slug=slug))
@@ -114,6 +124,7 @@ def index():
 	print("qweqwe: ", page)
 	if q:
 		posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q))
+		# posts = Post.query.join(Tag).filter(Post.id == Tag.post_id)
 	else:
 		posts = Post.query.order_by(Post.created.desc())
 	pages = posts.paginate(page=page, per_page=5)
@@ -127,7 +138,8 @@ def post_detail(slug):
     for tag in tags:
         print(tag.slug, tag.name)
     # tags = post.tags
-    comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
+    comment_info = db.session.query(Comment, User, Role).filter(Comment.post_id == post.id, Comment.user_id == User.id,
+                                                                Comment.role_id == Role.id).all()
     return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
 
 

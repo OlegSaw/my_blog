@@ -58,10 +58,7 @@ class Tag(db.Model):
 
 
 #users manager
-roles_users = db.Table('roles_users',
-        db.Column('user_id', db.Integer(), db.ForeignKey('users.id'), default='admin'),
-        db.Column('role_id', db.Integer(), db.ForeignKey('roles.id'), default='admin')
-    )
+roles_users = db.Table('roles_users', db.Column('user_id', db.Integer(), db.ForeignKey('users.id')), db.Column('role_id', db.Integer(), db.ForeignKey('roles.id')))
 
 
 class User(db.Model, UserMixin):
@@ -73,6 +70,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean(), default=True)
     social_id = db.Column(db.String(64), unique=True)
     nickname = db.Column(db.String(64))
+    role_ids = db.Column(db.ForeignKey('roles.id'))
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
 
 
@@ -84,7 +82,7 @@ class Role(db.Model, RoleMixin):
     discription = db.Column(db.String(255))
 
     def __repr__(self):
-        return '<Role: {}>'.format(self.name)
+        return '{}'.format(self.name)
 
 
 class Comment(db.Model):
@@ -93,12 +91,14 @@ class Comment(db.Model):
     body = db.Column(db.Text, nullable=False)
     post_id = db.Column(db.ForeignKey('posts.id'))
     user_id = db.Column(db.ForeignKey('users.id'))
+    role_id = db.Column(db.ForeignKey('roles.id'))
+    role_for_comment = db.Column(db.String(64))
 
     def __init__(self, *args, **kwargs):
         super(Comment, self).__init__(*args, **kwargs)
 
     def __repr__(self):
-        return '<Comment body: {}, post: [], user: []>'.format(self.body, self.post_id, self.user_id)
+        return '<Comment body: {}>'.format(self.body, self.post_id, self.user_id, self.role_id)
 
 
 
