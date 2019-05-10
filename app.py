@@ -111,7 +111,7 @@ def oauth_callback(provider):
         print(user.id)
         # roles_users = Role.query.filter_by(id='1').first()
         # print(roles_users)
-        roles_users = roles_users(user.id, roles_users)
+        # roles_users = roles_users(user.id, roles_users)
         # user.roles_users.append(1)
         # print('asdasdasd', user)
         print(roles_users)

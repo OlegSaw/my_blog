@@ -11,7 +11,7 @@
 {% block content %}
     {% for post in pages.items %}
         <p>
-            <a href="{{ url_for('posts.post_detail', slug=post.slug)}}">{{ post.title }}</a>
+            <a href="{{ url_for('posts.post_detail', slug=post.slug)}}">{{ post.title | safe}}</a>
         </p>
     {% endfor %}
 

@@ -5,24 +5,30 @@
 {% endblock %}
 
 {% block content_title %}
-    {{ post.title }}
+    {{ post.title | safe }}
+
 
 {% endblock %}
 
 {% block content %}
+
     <div class="tags">
-            {% for tag in tags %}
-                <a href="{{ url_for('posts.tag_detail', slug=tag.slug) }}">
-                <span class="badge badge-pill badge-success"> {{ tag.name }}</span></a>
-            {% endfor %}
+    {% if  tags != "NULL" %}
+        {% for tag  in tags %}
+            <a href="{{ url_for('posts.tag_detail', slug=tag.slug)}}">
+            <span class="badge badge-pill badge-danger" style="text-decoration: none"> {{ tag.name }}</span></a>
+        {% endfor %}
+    {% endif %}
     </div>
 
 
-    <div class="main-content">
-        {{ post.body }}
+    <div class="main-content ">
+    <p content="width=device-width, initial-scale=1 max-width: 400px">
+        {{ post.body  | safe  }}
+    </p>
     <div class="bor">
         <div>
-{{ comments }}
+{{ comments.role_for_comment }}
         <p class="sizeT"> Comments: </p>
 
                 {% for comment in comments %}
@@ -48,5 +54,17 @@
     <input type="submit" value="Edit" class="btn btn-warning">
 </form>
         {% endif %}
+    </div>
+{% endblock %}
+
+{% block comment %}
+
+    <div class="col-md-6"  >
+
+      <form action ="{{ url_for('posts.create_comment', slug=slug) }}" method="POST">
+        <input type="text" placeholder="Leave comment" name="body">
+
+        <button type="submit" class="btn btn-success">Create</button>
+      </form>
     </div>
 {% endblock %}

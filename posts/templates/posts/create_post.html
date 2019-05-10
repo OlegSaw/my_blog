@@ -11,22 +11,35 @@
 
 {% block content %}
 
-    <div class="col-md-6"  >
+
   <form action ="{{ url_for('posts.create_post') }}" method="POST">
+   <div class="col-md-50"  >
+              <div class="form-group" >
+                  <label for = "title"> title</label>
+              <input type="text" name="title" class="form-control form-control-lg" >
+                          <label for = "body"> body</label>
+              <textarea name="body" id="summernote"></textarea>
+                <label for = "tags"> tags</label>
+              <input type="StringField" name="tags" class="form-control form-control-lg">
+              </div>
+    <input type="submit" value="Create" class="btn btn-success" />
+   </div>
+{##}
+{#  {% for field in form %}#}
+{##}
+{#      <div class="form-group" >#}
+{##}
+{#      {{ field.label(class='control-label') }}#}
+{##}
+{#      {{ field(class='form-control') }}#}
+{#      </div>#}
+{##}
+{#  {% endfor %}#}
 
-  {% for field in form %}
-
-      <div class="form-group">
-      {{ field.label(class='control-label') }}
-      {{ field(class='form-control') }}
-
-      </div>
-  {% endfor %}
-
-  <button type="submit" class="btn btn-success">Create</button>
+{#  <button type="submit" class="btn btn-success">Create</button>#}
 
   </form>
-    </div>
+
 {% endblock %}
 
 

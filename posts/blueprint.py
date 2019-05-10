@@ -14,9 +14,12 @@ posts = Blueprint('posts', __name__, template_folder='templates')
 def create_post():
     if current_user.has_role('admin') or current_user.has_role('moder'):
         if request.method == 'POST':
+            # title = request.form['title']
+            print(request.form)
             title = request.form['title']
             body = request.form['body']
             tags = request.form['tags']
+            print("ТЭГЖ", tags)
             if tags is not None:
                 tags = tags.split(', ')
             try:
@@ -135,12 +138,44 @@ def index():
 def post_detail(slug):
     post = Post.query.filter(Post.slug == slug).first_or_404()
     tags = Tag.query.filter(Tag.post_id == post.id).all()
-    for tag in tags:
-        print(tag.slug, tag.name)
-    # tags = post.tags
-    comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
-    print(comment_info)
-    return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
+    if tags is not None:
+        for tag in tags:
+            print(tag.slug, tag.name)
+        # tags = post.tags
+        comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
+        print(comment_info)
+        return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
+    else:
+        for tag in tags:
+            print(tag.slug, tag.name)
+            # tags = post.tags
+        comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id,
+                                                              Comment.user_id == User.id).all()
+        print(comment_info)
+        return render_template('posts/post_detail.html', post=post, tags="NULL", comments=comment_info)
+#
+# def create_comment(slug):
+#     if request.method == 'GET':
+#         # roles_users = Role.query.filter_by(id=current_user.id).first()
+#         return render_template('posts/post_detail.html', slug=slug)
+#     if request.method == 'POST':
+#         post = Post.query.filter(Post.slug == slug).first_or_404()
+#         print('qweqwee111qwe', current_user.roles)
+#         print('qweqwee111qwe')
+#
+#         # roles_user = db.session.query(User, Role).filter(User.role_id == current_user.id).all()
+#         # User.query.join(User.roles).filter(User.id == current_user.id).all()
+#         # Seroles_users.query.filter_by(id=current_user.id).all()
+#         # comment = Comment.query.filter_by(role_id=1).all()
+#         print('eeee', )
+#         if post:
+#             comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id,
+#                               role_for_comment=str(current_user.roles))
+#             db.session.add(comment)
+#             db.session.commit()
+#             return redirect(url_for('posts.post_detail', slug=slug))
+#         else:
+#             return '400', 400
 
 
 @posts.route('/tag/<slug>')
