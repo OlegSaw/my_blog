@@ -19,22 +19,23 @@
               <input type="text" name="title" class="form-control form-control-lg" >
                           <label for = "body"> body</label>
               <textarea name="body" id="summernote"></textarea>
-                <label for = "tags"> tags</label>
-              <input type="StringField" name="tags" class="form-control form-control-lg">
+
+                    {% for field in form %}
+
+      <div class="form-group" >
+
+      {{ field.label(class='control-label') }}
+
+      {{ field(class='form-control') }}
+      </div>
+
+  {% endfor %}
+{#              <input type="text" name="tags" class="form-control form-control-lg">#}
               </div>
     <input type="submit" value="Create" class="btn btn-success" />
    </div>
-{##}
-{#  {% for field in form %}#}
-{##}
-{#      <div class="form-group" >#}
-{##}
-{#      {{ field.label(class='control-label') }}#}
-{##}
-{#      {{ field(class='form-control') }}#}
-{#      </div>#}
-{##}
-{#  {% endfor %}#}
+
+
 
 {#  <button type="submit" class="btn btn-success">Create</button>#}
 

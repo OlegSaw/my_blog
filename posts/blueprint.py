@@ -19,9 +19,10 @@ def create_post():
             title = request.form['title']
             body = request.form['body']
             tags = request.form['tags']
-            print("ТЭГЖ", tags)
-            if tags is not None:
+            print("ТЭГЖ", len(tags))
+            if len(tags) > 0:
                 tags = tags.split(', ')
+                print("RAZMER:", len(tags))
             try:
                 post = Post(title=title, body=body)
                 db.session.add(post)
@@ -138,21 +139,23 @@ def index():
 def post_detail(slug):
     post = Post.query.filter(Post.slug == slug).first_or_404()
     tags = Tag.query.filter(Tag.post_id == post.id).all()
-    if tags is not None:
-        for tag in tags:
-            print(tag.slug, tag.name)
-        # tags = post.tags
-        comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
-        print(comment_info)
-        return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
-    else:
-        for tag in tags:
-            print(tag.slug, tag.name)
-            # tags = post.tags
-        comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id,
-                                                              Comment.user_id == User.id).all()
-        print(comment_info)
-        return render_template('posts/post_detail.html', post=post, tags="NULL", comments=comment_info)
+    print(len(tags))
+    # if tags is not None:
+    for tag in tags:
+        print(tag.slug, tag.name)
+        print(post.tags)
+    # tags = post.tags
+    comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
+    print(comment_info)
+    return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
+    # else:
+    #     for tag in tags:
+    #         print(tag.slug, tag.name)
+    #         # tags = post.tags
+    #     comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id,
+    #                                                           Comment.user_id == User.id).all()
+    #     print(comment_info)
+    #     return render_template('posts/post_detail.html', post=post, tags="Null", comments=comment_info)
 #
 # def create_comment(slug):
 #     if request.method == 'GET':

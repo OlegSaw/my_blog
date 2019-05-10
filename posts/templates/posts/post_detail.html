@@ -13,12 +13,12 @@
 {% block content %}
 
     <div class="tags">
-    {% if  tags != "NULL" %}
-        {% for tag  in tags %}
+
+        {% for tag  in tags if tags != "Null"%}
             <a href="{{ url_for('posts.tag_detail', slug=tag.slug)}}">
             <span class="badge badge-pill badge-danger" style="text-decoration: none"> {{ tag.name }}</span></a>
         {% endfor %}
-    {% endif %}
+
     </div>
 
 
@@ -51,7 +51,7 @@
     {% endif %}
      {% if current_user.has_role('moder') or current_user.has_role('admin') %}
 <form method="LINK" action="{{ url_for('posts.edit_post', slug=post.slug) }}">
-    <input type="submit" value="Edit" class="btn btn-warning">
+    <input type="submit" value="Edit" class="btn btn-danger">
 </form>
         {% endif %}
     </div>
