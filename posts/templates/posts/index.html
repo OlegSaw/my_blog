@@ -15,7 +15,7 @@
         <div class="jumbotron">
         <h1 class="display-3">{{ post.title | safe}}</h1>
             <p class="lead" >{{ post.body | safe }}</p>
-         <a class="btn btn-primary btn-lg" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a></div>
+         <a class="btn btn-info" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a></div>
 
     {% endfor %}
 
