@@ -1,5 +1,35 @@
 {% extends 'base.html' %}
+<script>
+ $(document).ready(function () {
+            $('#top').on('submit', function (event) {
+                console.log('was clicked');
+                let formData = new FormData();
+                formData.append('content', $('#new_post').val());
+                $('#new_post').val('');
+                event.preventDefault();
+                let href = "{{ url_for('posts.post_detail') }}";
 
+                $.ajax({
+                    url: "http://127.0.0.1:5000/blog/qeqwe/comment/",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    {#comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id, role_for_comment=str(current_user.roles))#}
+                    success: function (response) {
+                        href = href.replace('1', response['username']);
+                        let a = $('<a></a>').attr('href', href).addClass('avatar');
+                        let img = $('<img></img>').attr('src', response['gravatar_url']);
+
+                        let paragraph = $('<p></p>').addClass('message-content').text(response['content']);
+                        let buttonDelete = $('<button></button>').attr('id', response['message_id']).attr('name', a.attr('href')).text('Удалить');
+                        {#$('#ajax_ul').prepend($('22222'));#}
+                        $('#ajax_ul').prepend($('<li></li>').append(a.append(img)).append(paragraph.append(buttonDelete)));
+                    }
+                })
+            });
+        });
+</script>
 {% block title %}
     {{ post.title }}
 {% endblock %}
@@ -16,55 +46,55 @@
 
         {% for tag  in tags if tags != "Null"%}
             <a href="{{ url_for('posts.tag_detail', slug=tag.slug)}}">
-            <span class="badge badge-pill badge-danger" style="text-decoration: none"> {{ tag.name }}</span></a>
+                <span class="badge badge-pill badge-danger" style="text-decoration: none"> {{ tag.name }}</span></a>
         {% endfor %}
 
     </div>
 
 
     <div class="main-content ">
-    <p content="width=device-width, initial-scale=1 max-width: 400px">
-        {{ post.body  | safe  }}
-    </p>
-    <div class="bor">
-        <div>
-{{ comments.role_for_comment }}
-        <p class="sizeT"> Comments: </p>
+        <p content="width=device-width, initial-scale=1 max-width: 400px">
+            {{ post.body  | safe  }}
+        </p>
+        <div class="bor">
+            <div>
+                {{ comments.role_for_comment }}
+                <p class="sizeT"> Comments: </p>
 
                 {% for comment in comments %}
                     <p>
                         User: {{ comment[1].email }} <br>
                         Role: {{ comment[2]}} <br>
                         Comment: {{ comment[0].body }}
-{{ role_for_comment }}
+                        {{ role_for_comment }}
 
                     </p>
                 {% endfor %}
+
+                <div class="main-content">
+                    {% if current_user.is_authenticated %}
+                        <form enctype="multipart/form-data" class="form-row" id="top">
+                            <form  class="form-inline"  >
+                                <div class="form-group col-sm-10">
+                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" >
+                                </div>
+                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >
+                            </form>
+                                <ul id="ajax_ul"></ul>
+
+
+                        </form>
+
+                    {% endif %}
+
+
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
-    <div class="main-content">
-    {% if current_user.is_authenticated %}
-        <form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}">
-            <input type="submit" value="Create comment" class="btn btn-warning">
-        </form>
-    {% endif %}
-     {% if current_user.has_role('moder') or current_user.has_role('admin') %}
-<form method="LINK" action="{{ url_for('posts.edit_post', slug=post.slug) }}">
-    <input type="submit" value="Edit" class="btn btn-danger">
-</form>
+        {% if current_user.has_role('moder') or current_user.has_role('admin') %}
+            <form method="LINK" action="{{ url_for('posts.edit_post', slug=post.slug) }}">
+                <input type="submit" value="Edit" class="btn btn-danger">
+            </form>
         {% endif %}
-    </div>
-{% endblock %}
-
-{% block comment %}
-
-    <div class="col-md-6"  >
-
-      <form action ="{{ url_for('posts.create_comment', slug=slug) }}" method="POST">
-        <input type="text" placeholder="Leave comment" name="body">
-
-        <button type="submit" class="btn btn-success">Create</button>
-      </form>
     </div>
 {% endblock %}

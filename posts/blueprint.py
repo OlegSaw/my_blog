@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from .forms import PostForm
 from models import Post, Tag, Comment, User, Role, roles_users
 from app import db
@@ -95,19 +95,14 @@ def edit_post(slug):
 @posts.route('/<slug>/comment/', methods=['GET', 'POST'])
 @login_required
 def create_comment(slug):
-    if request.method == 'GET':
+    if request.method == "GET":
+    # if request.is_xhr:
         # roles_users = Role.query.filter_by(id=current_user.id).first()
+        # return jsonify('posts/create_comment.html', slug=slug)
         return render_template('posts/create_comment.html', slug=slug)
-    if request.method == 'POST':
+    if request.method == 'POST' or request.form['content']:
         post = Post.query.filter(Post.slug == slug).first_or_404()
-        print('qweqwee111qwe', current_user.roles)
-        print('qweqwee111qwe')
-
-        # roles_user = db.session.query(User, Role).filter(User.role_id == current_user.id).all()
-            # User.query.join(User.roles).filter(User.id == current_user.id).all()
-            # Seroles_users.query.filter_by(id=current_user.id).all()
-        # comment = Comment.query.filter_by(role_id=1).all()
-        print('eeee', )
+        print("i am here")
         if post:
             comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id, role_for_comment=str(current_user.roles))
             db.session.add(comment)
@@ -119,20 +114,20 @@ def create_comment(slug):
 
 @posts.route('/')
 def index():
-	q = request.args.get('q')
-	page = request.args.get('page')
-	if page and page.isdigit():
-		page = int(page)
-	else:
-		page = 1
-	print("qweqwe: ", page)
-	if q:
-		posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q))
-		# posts = Post.query.join(Tag).filter(Post.id == Tag.post_id)
-	else:
-		posts = Post.query.order_by(Post.created.desc())
-	pages = posts.paginate(page=page, per_page=5)
-	return render_template('posts/index.html', posts=posts, pages=pages)
+    q = request.args.get('q')
+    page = request.args.get('page')
+    if page and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
+    print("qweqwe: ", page)
+    if q:
+        posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q))
+    # posts = Post.query.join(Tag).filter(Post.id == Tag.post_id)
+    else:
+        posts = Post.query.order_by(Post.created.desc())
+    pages = posts.paginate(page=page, per_page=5)
+    return render_template('posts/index.html', posts=posts, pages=pages)
 
 
 @posts.route('<slug>')
@@ -183,10 +178,10 @@ def post_detail(slug):
 
 @posts.route('/tag/<slug>')
 def tag_detail(slug):
-	tag = Tag.query.filter(Tag.slug == slug).first_or_404()
-	print(tag)
-	posts = Post.query.join(Tag).filter(Post.id == Tag.post_id, Tag.slug == slug)
-	print(posts)
-	# posts = tag.posts
-	return render_template('posts/tag_detail.html', tag=tag, posts=posts)
+    tag = Tag.query.filter(Tag.slug == slug).first_or_404()
+    print(tag)
+    posts = Post.query.join(Tag).filter(Post.id == Tag.post_id, Tag.slug == slug)
+    print(posts)
+    # posts = tag.posts
+    return render_template('posts/tag_detail.html', tag=tag, posts=posts)
 
