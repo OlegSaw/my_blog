@@ -126,7 +126,7 @@ def index():
     # posts = Post.query.join(Tag).filter(Post.id == Tag.post_id)
     else:
         posts = Post.query.order_by(Post.created.desc())
-    pages = posts.paginate(page=page, per_page=5)
+    pages = posts.paginate(page=page, per_page=6)
     return render_template('posts/index.html', posts=posts, pages=pages)
 
 
@@ -134,14 +134,14 @@ def index():
 def post_detail(slug):
     post = Post.query.filter(Post.slug == slug).first_or_404()
     tags = Tag.query.filter(Tag.post_id == post.id).all()
-    print(len(tags))
+    # print(len(tags))
     # if tags is not None:
-    for tag in tags:
-        print(tag.slug, tag.name)
-        print(post.tags)
+    # for tag in tags:
+        # print(tag.slug, tag.name)
+        # print(post.tags)
     # tags = post.tags
     comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
-    print(comment_info)
+    # print(comment_info)
     return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
     # else:
     #     for tag in tags:

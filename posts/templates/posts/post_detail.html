@@ -3,6 +3,7 @@
  $(document).ready(function () {
             $('#top').on('submit', function (event) {
                 console.log('was clicked');
+                alert("qqqq");
                 let formData = new FormData();
                 formData.append('content', $('#new_post').val());
                 $('#new_post').val('');
@@ -70,26 +71,28 @@
 
                     </p>
                 {% endfor %}
-
-                <div class="main-content">
-                    {% if current_user.is_authenticated %}
-                        <form enctype="multipart/form-data" class="form-row" id="top">
-                            <form  class="form-inline"  >
-                                <div class="form-group col-sm-10">
+                        <form enctype="multipart/form-data" class="top">
                                     <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" >
-                                </div>
                                 <input type="submit" value="Create comment" class="btn btn-success mb-4" >
-                            </form>
                                 <ul id="ajax_ul"></ul>
-
-
                         </form>
 
-                    {% endif %}
 
-
-                </div>
             </div>
+{#                                   {% if current_user.is_authenticated %}#}
+{#                        <form enctype="multipart/form-data" class="form-row" id="top">#}
+{#                            <form  form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}" class="form-inline"  >#}
+{#                                <div class="form-group col-sm-10">#}
+{#                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" >#}
+{#                                </div>#}
+{#                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >#}
+{#                            </form>#}
+{#                                <ul id="ajax_ul"></ul>#}
+{##}
+{##}
+{#                        </form>#}
+{##}
+{#                    {% endif %}#}
         </div>
         {% if current_user.has_role('moder') or current_user.has_role('admin') %}
             <form method="LINK" action="{{ url_for('posts.edit_post', slug=post.slug) }}">
@@ -97,4 +100,13 @@
             </form>
         {% endif %}
     </div>
+
+        {% if current_user.is_authenticated %}
+        <form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}">
+            <input type="submit" value="Create comment" class="btn btn-warning">
+        </form>
+    {% endif %}
+
+
+
 {% endblock %}
