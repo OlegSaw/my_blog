@@ -114,6 +114,7 @@ def create_comment(slug):
 
 @posts.route('/')
 def index():
+    # post = Post.query.filter(Post.slug == slug).first_or_404()
     q = request.args.get('q')
     page = request.args.get('page')
     if page and page.isdigit():

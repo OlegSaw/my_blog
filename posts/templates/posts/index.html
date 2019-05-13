@@ -1,4 +1,6 @@
+
 {% extends 'base.html' %}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
@@ -12,13 +14,26 @@
 
 {% block content %}
 
+<script>
+$(document).ready(function() {
+	$('.block').on('click', '.extremum-click', function() {
+        let slug = $("#needsomeslug").attr("name") +' #content';
+        console.log(slug);
+	    $("#area").load(slug);
+		$(this).siblings('.extremum-slide').slideToggle("fast");
+	});
+        {#delete href;#}
+});
+</script>
     {% for post in pages.items %}
 
         <div class="block" style="border: 1px solid; padding: 20px; margin: 10px; border-radius: 5px;">
-        <h1 class="extremum-click ">{{ post.title | safe}}</h1>
+        <h1 class="extremum-click " name="{{ post.slug }}" id="needsomeslug">{{ post.title | safe}} {{ post.slug }}</h1>
+            <div class="extremum-slide" id="area">
 
-            <div class="extremum-slide" >{{ post.body | safe }}
-            <a class="btn btn-info" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a></div></div>
+            </div>
+{#                {{ post.body | safe }}#}
+ <a class="btn btn-info" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a></div>
 
 
     {% endfor %}
