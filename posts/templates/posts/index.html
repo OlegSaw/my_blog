@@ -19,18 +19,8 @@ $(document).ready(function() {
 	$('.block').on('click', '.extremum-click', function() {
         let slug = $(this).attr("name") +' #content';
         console.log(slug);
-        {#$.ajax({#}
-        {#    type: "GET",#}
-        {#    url: slug,#}
-        {#    processData: false,#}
-        {#    contentType: false,#}
-        {#     success: function (response) {#}
-        {##}
-        {##}
-        {#     }#}
-
         $("#area").load(slug);
-        console.log($(this).parent().find('div').text());
+        {#console.log($(this).parent().find('div').text());#}
         {#$(this).parent().find('#area').text().slideToggle("fast");#}
 		$(this).siblings('#area').slideToggle("slow");
 	});
