@@ -127,7 +127,7 @@ def index():
     # posts = Post.query.join(Tag).filter(Post.id == Tag.post_id)
     else:
         posts = Post.query.order_by(Post.created.desc())
-    pages = posts.paginate(page=page, per_page=6)
+    pages = posts.paginate(page=page, per_page=4)
     return render_template('posts/index.html', posts=posts, pages=pages)
 
 
@@ -142,6 +142,17 @@ def post_detail(slug):
         # print(post.tags)
     # tags = post.tags
     comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
+    # if request.is_xhr:
+    #     post_det = {
+    #         "post": post,
+    #         "tags": tags,
+    #         "comment": comment_info
+    #         # "body": post.body,
+    #         # "title": post.title,
+    #         # "comment": comment_info,
+    #         # "tag": post.tags
+    #     }
+    #     return jsonify(post_det)
     # print(comment_info)
     return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
     # else:

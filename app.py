@@ -5,7 +5,6 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from oauth import OAuthSignIn
 
-
 from flask_login import LoginManager, UserMixin, login_user, logout_user,\
     current_user
 from flask_admin import Admin, AdminIndexView
@@ -57,20 +56,13 @@ class RoleAdminView(ModelView):
 
 class UserAdminView(ModelView):
     pass
-    # form_columns = ['role_id']
-
-
-class CommentAdminView(BaseModelView):
-    pass
-    # form_columns = ['body', 'id']
-
 
 admin = Admin(app, 'MainPage', url='/', index_view=HomeAdminView(name='home'))
 admin.add_view(PostAdminView(Post, db.session))
 admin.add_view(TagAdminView(Tag, db.session))
 admin.add_view(UserAdminView(User, db.session))
 admin.add_view(RoleAdminView(Role, db.session))
-admin.add_view(CommentAdminView(Comment, db.session))
+admin.add_view(ModelView(Comment, db.session))
 
 ###user manager
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -95,27 +87,22 @@ def oauth_callback(provider):
         return redirect(url_for('index'))
     oauth = OAuthSignIn.get_provider(provider)
     social_id, username, email = oauth.callback()
-    roles_users = Role.query.filter_by(id='1').first()
-    print(roles_users)
     if social_id is None:
         flash('Authentication failed.')
         return redirect(url_for('index'))
     user = User.query.filter_by(social_id=social_id).first()
     if not user:
-        # user.roles_users.append(user.id, '1')
-
+        # roles = Role(name='user')
+        # user.roles_usert.append(1)
         user = User(social_id=social_id, nickname=username, email=email)
-        # print('asdasdasd', user)
+        # user.roles_users.append(1)
+        print('asdasdasd', user)
         db.session.add(user)
         db.session.commit()
-        print(user.id)
-        # roles_users = Role.query.filter_by(id='1').first()
-        # print(roles_users)
-        # roles_users = roles_users(user.id, roles_users)
+        # user = User(social_id=social_id, nickname=username, email=email)
         # user.roles_users.append(1)
         # print('asdasdasd', user)
-        print(roles_users)
-        # db.session.add(roles_users)
+        # db.session.add(user)
         # db.session.commit()
     login_user(user, True)
     return redirect(url_for('index'))

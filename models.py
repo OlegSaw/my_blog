@@ -70,7 +70,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean(), default=True)
     social_id = db.Column(db.String(64), unique=True)
     nickname = db.Column(db.String(64))
-    role_ids = db.Column(db.ForeignKey('roles.id'))
+    # role_ids = db.Column(db.ForeignKey('roles.id'))
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
 
 
@@ -89,7 +89,7 @@ class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer(), primary_key=True)
     body = db.Column(db.Text, nullable=False)
-    role_for_comment = db.Column(db.String(64))
+    # role_for_comment = db.Column(db.String(64))
     post_id = db.Column(db.ForeignKey('posts.id'))
     user_id = db.Column(db.ForeignKey('users.id'))
     # role_id = db.Column(db.ForeignKey('roles.id'))
