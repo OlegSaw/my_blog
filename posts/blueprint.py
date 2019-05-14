@@ -104,7 +104,7 @@ def create_comment(slug):
         post = Post.query.filter(Post.slug == slug).first_or_404()
         print("i am here")
         if post:
-            comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id, role_for_comment=str(current_user.roles))
+            comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id)
             db.session.add(comment)
             db.session.commit()
             return redirect(url_for('posts.post_detail', slug=slug))

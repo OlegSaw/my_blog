@@ -14,64 +14,64 @@
 
 {% block content %}
 
-<script>
-$(document).ready(function() {
-	$('.block').on('click', '.extremum-click', function() {
-        let slug = $(this).attr("name") +' #content';
-        console.log(slug);
-        $("#area").load(slug);
-        {#console.log($(this).parent().find('div').text());#}
-        {#$(this).parent().find('#area').text().slideToggle("fast");#}
-		$(this).siblings('#area').slideToggle("slow");
-	});
-        {#delete href;#}
-});
-</script>
-<div class=".container-fluid">
-<div class="row">
-<div class="col-sm">
-        <div class="block2" style="border: 1px solid; padding: 235px; margin: 5px; border-radius: 5px;">
-                <div class="extremum-slide" id="area">
-                    Тут будут новости   </div>
-        </div> </div>
-    {% for post in pages.items %}
-        <div class="span8">
-        <div class="block" style="border: 1px solid; padding: 10px; margin: 5px; border-radius: 5px;">
-
-        <h2 class="extremum-click " name="{{ post.slug }}" id="needsomeslug">{{ post.title | safe}}</h2>
-
-{#                {{ post.body | safe }}#}
- <a class="btn btn-info" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a>
+    <script>
+        $(document).ready(function() {
+            $('.block').on('click', '.extremum-click', function() {
+                let slug = $(this).attr("name") +' #content';
+                console.log(slug);
+                {#location.replace(slug);#}
+                $("#area").load(slug);
+                {#console.log($(this).parent().find('div').text());#}
+                {#$(this).parent().find('#area').text().slideToggle("fast");#}
+                $(this).siblings('#area').slideToggle("slow");
+            });
+            {#delete href;#}
+        });
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                {% for post in pages.items %}
+                    <div class="block" style="border: 1px solid; padding: 10px; margin: 5px; border-radius: 5px;">
+                        <h2 class="extremum-click " name="{{ post.slug }}" id="needsomeslug">{{ post.title | safe}}</h2>
+                        {#                {{ post.body | safe }}#}
+                        <a class="btn btn-info" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-sm">
+                <div class="block2" style="border: 1px solid; padding: 2px; margin: 5px; border-radius: 5px;">
+                    <div class="extremum-slide" id="area">
+                        Тут будут новости   </div>
+                </div>
+            </div>
         </div>
+    </div>
+    <nav>
+        <ul class="pagination">
+            <li {%  if not pages.has_prev %}
+                class="page-item disabled"
+            {% endif %}>
+                <a class="page-link" href="./?page={{ pages.prev_num }}" tabindex="-1">Previous</a>
+            </li>
 
-
-    {% endfor %}</div></div></div>
-
-  <nav>
-  <ul class="pagination">
-    <li {%  if not pages.has_prev %}
-        class="page-item disabled"
-    {% endif %}>
-      <a class="page-link" href="./?page={{ pages.prev_num }}" tabindex="-1">Previous</a>
-    </li>
-
-  {% for page in pages.iter_pages(left_edge=2, left_current=2,
+            {% for page in pages.iter_pages(left_edge=2, left_current=2,
                    right_current=5, right_edge=2) %}
 
- <li {% if  page == pages.page %} class="page-item active" {% endif %}>
-      <a class="page-link" href="./?page={{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
-    </li>
+                <li {% if  page == pages.page %} class="page-item active" {% endif %}>
+                    <a class="page-link" href="./?page={{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
+                </li>
 
-  {% endfor %}
+            {% endfor %}
 
-   <li {%  if not pages.has_next %}
-        class="page-item disabled"
-    {% endif %}>
-      <a class="page-link" href="./?page={{ pages.next_num }}" >Next</a>
-    </li>
+            <li {%  if not pages.has_next %}
+                class="page-item disabled"
+            {% endif %}>
+                <a class="page-link" href="./?page={{ pages.next_num }}" >Next</a>
+            </li>
 
-  </ul>
-</nav>
+        </ul>
+    </nav>
 {% endblock %}
 
 

@@ -42,7 +42,9 @@
 {% endblock %}
 
 {% block content %}
-
+<div id="content">
+<h1>
+{{ post.title | safe }}</h1>
     <div class="tags">
 
         {% for tag  in tags if tags != "Null"%}
@@ -54,9 +56,11 @@
 
 
     <div class="main-content ">
-        <div id="content" content="width=device-width, initial-scale=1 max-width: 400px">
-            {{ post.body  | safe  }}
+        <div id="content22" content="width=device-width, initial-scale=1 max-width: 400px">
+            {{ post.body | safe  }}
         </div>
+    </div>
+
         <div class="bor">
             <div>
                 {{ comments.role_for_comment }}
@@ -108,5 +112,5 @@
     {% endif %}
 
 
-
+</div>
 {% endblock %}
