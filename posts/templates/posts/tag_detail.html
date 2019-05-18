@@ -9,12 +9,57 @@
 {% endblock %}
 
 {% block content %}
+    <script>
+        $(document).ready(function() {
 
+            // Check for hash value in URL
+            var hash = window.location;
+            console.log(hash);
+            {#if(hash.length > 0){#}
+            {#    let slug = hash + ' #content';#}
+            {#    $("#area").load(slug);#}
+            {#    $(this).siblings('#area').slideToggle("slow");}#}
+            $('.block').on('click', '.extremum-click', function() {
+                let slug = "http://127.0.0.1:5000/blog/" + $(this).attr("name") +' #content';
+                {#let url =  $(this).attr("name");#}
+                {#console.log(slug);#}
+                {#window.location.hash = url;#}
+                $("#area").load(slug);
+                $(this).siblings('#area').slideToggle("slow");
+            });
+        });
+    </script>
+
+{#        <div class="block" style="border: 1px solid; padding: 10px; margin: 5px; border-radius: 5px;">#}
+{#        <div class="post">#}
+{#            <a href="{{ url_for('posts.index', slug=post.slug) }}" name ="{{ post.slug }}" class="zag"><h1 class="display-3">{{ post.title }}</h1> </a>#}
+{#        </div>#}
+{#          </div>#}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
     {% for post in posts %}
-        <div class="post">
-            <a href="{{ url_for('posts.post_detail', slug=post.slug) }}" style="text-decoration: none" class="zag"><h1 class="display-3">{{ post.title }}</h1> </a>
+                    <div class="block" style="border: 1px solid; padding: 10px; margin: 5px; border-radius: 5px;">
+                        <h2 class="extremum-click " name="{{ post.slug }}" id="needsomeslug">{{ post.title}}</h2>
+{#                          <a class="btn btn-info" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a>#}
+                        {#                {{ post.body | safe }}#}
+
+                    </div>
+ {% endfor %}
+            </div>
+
+            <div class="col-sm">
+                <div class="block2" style="border: 1px solid; padding: 2px; margin: 5px; border-radius: 5px; position: fixed; z-index: 101; width: 800px; height: 600px; overflow-y:scroll;">
+
+                    <div class="extremum-slide" id="area">
+                        Тут будут новости
+{#                    <a class="btn btn-info" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a> #}
+                        </div>
+                </div>
+            </div>
         </div>
-<hr>
-    {% endfor %}
+    </div>
+
+
 
 {% endblock %}

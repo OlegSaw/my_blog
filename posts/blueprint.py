@@ -133,13 +133,6 @@ def post_detail(slug):
     if request.method == "GET":
         post = Post.query.filter(Post.slug == slug).first_or_404()
         tags = Tag.query.filter(Tag.post_id == post.id).all()
-        print(request.path)
-        url = request.path
-        url = url.split('/')
-        url = url[2].replace(url[2], "#"+url[2])
-        print(url)
-        url = 'http://127.0.0.1:5000/blog/'+url
-        print(url)
         comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
         return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
     if request.method == 'POST':
@@ -197,5 +190,6 @@ def tag_detail(slug):
     posts = Post.query.join(Tag).filter(Post.id == Tag.post_id, Tag.slug == slug)
     print(posts)
     # posts = tag.posts
+    # return redirect(url_for("posts.index"))
     return render_template('posts/tag_detail.html', tag=tag, posts=posts)
 
