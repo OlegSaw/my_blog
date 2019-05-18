@@ -82,11 +82,7 @@ def edit_post(slug):
                     db.session.commit()
             return redirect(url_for("posts.post_detail", slug=post.slug))
 
-        # form = PostForm(obj=post)
-        # for foa in form:
-        # 	print(foa)
         tags = Tag.query.filter(Tag.post_id == post.id).all()
-        # print(type(tags))
         tags = ','.join(str(tag) for tag in tags)
         return render_template('posts/edit_post.html', post=post, tags=tags)
     else:
@@ -96,7 +92,7 @@ def edit_post(slug):
 @login_required
 def create_comment(slug):
     if request.method == "GET":
-    # if request.is_xhr:
+        # if request.is_xhr:
         # roles_users = Role.query.filter_by(id=current_user.id).first()
         # return jsonify('posts/create_comment.html', slug=slug)
         return render_template('posts/create_comment.html', slug=slug)
@@ -117,6 +113,7 @@ def index():
     # post = Post.query.filter(Post.slug == slug).first_or_404()
     q = request.args.get('q')
     page = request.args.get('page')
+    print(request.path)
     if page and page.isdigit():
         page = int(page)
     else:
@@ -127,7 +124,7 @@ def index():
     # posts = Post.query.join(Tag).filter(Post.id == Tag.post_id)
     else:
         posts = Post.query.order_by(Post.created.desc())
-    pages = posts.paginate(page=page, per_page=5)
+    pages = posts.paginate(page=page, per_page=10)
     return render_template('posts/index.html', posts=posts, pages=pages)
 
 
@@ -136,15 +133,30 @@ def post_detail(slug):
     if request.method == "GET":
         post = Post.query.filter(Post.slug == slug).first_or_404()
         tags = Tag.query.filter(Tag.post_id == post.id).all()
+        print(request.path)
+        url = request.path
+        url = url.split('/')
+        url = url[2].replace(url[2], "#"+url[2])
+        print(url)
+        url = 'http://127.0.0.1:5000/blog/'+url
+        print(url)
         comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
         return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
     if request.method == 'POST':
         post = Post.query.filter(Post.slug == slug).first_or_404()
+        url = request.path
+        url = url.split('/')
+        url = url[2].replace(url[2], "#" + url[2])
+        print(url)
+        url = 'http://127.0.0.1:5000/blog/' + url
+        print(url)
         if post:
             comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id)
             db.session.add(comment)
             db.session.commit()
-            return redirect(url_for('posts.post_detail', slug=slug))
+            # return 0
+            return redirect(url)
+            # return redirect(url_for('posts.post_detail', slug=slug))
     # else:
     #     for tag in tags:
     #         print(tag.slug, tag.name)

@@ -61,7 +61,7 @@
                 {% if tags %}
                     Tags: {% endif %}{% for tag in tags if tags != "Null"%}
                 <a href="{{ url_for('posts.tag_detail', slug=tag.slug)}}">
-                    <span class="badge badge-pill badge-danger" style="text-decoration: none"> {{ tag.name }}</span></a>
+                    <span class="badge-pill badge-success"> {{ tag.name }}</span></a>
             {% endfor %}
 
             </div>
@@ -90,7 +90,7 @@
                     </p>
                     <hr>
                 {% endfor %}
-                <form action ="{{ url_for('posts.create_comment', slug=slug) }}" method="POST">
+                <form action="{{ url_for('posts.post_detail', slug=post.slug)}}" method="POST">
                     <input type="text" placeholder="Leave comment" name="body" >
 
                     <button type="submit" class="btn btn-success">Create</button>
