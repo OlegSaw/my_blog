@@ -1,65 +1,82 @@
 {% extends 'base.html' %}
 <script>
- $(document).ready(function () {
-            $('#top').on('submit', function (event) {
-                console.log('was clicked');
-                alert("qqqq");
-                let formData = new FormData();
-                formData.append('content', $('#new_post').val());
-                $('#new_post').val('');
-                event.preventDefault();
-                let href = "{{ url_for('posts.post_detail') }}";
+    $(document).ready(function () {
+        let hash = window.location.hash.substr(1);
+        console.log(hash);
 
-                $.ajax({
-                    url: "http://127.0.0.1:5000/blog/qeqwe/comment/",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    {#comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id, role_for_comment=str(current_user.roles))#}
-                    success: function (response) {
-                        href = href.replace('1', response['username']);
-                        let a = $('<a></a>').attr('href', href).addClass('avatar');
-                        let img = $('<img></img>').attr('src', response['gravatar_url']);
-
-                        let paragraph = $('<p></p>').addClass('message-content').text(response['content']);
-                        let buttonDelete = $('<button></button>').attr('id', response['message_id']).attr('name', a.attr('href')).text('Удалить');
-                        {#$('#ajax_ul').prepend($('22222'));#}
-                        $('#ajax_ul').prepend($('<li></li>').append(a.append(img)).append(paragraph.append(buttonDelete)));
-                    }
-                })
-            });
-        });
+        {#$('#top').on('submit', function (event) {#}
+        {#    console.log('was clicked');#}
+        {#    alert("qqqq");#}
+        {#    let formData = new FormData();#}
+        {#    formData.append('content', $('#new_post').val());#}
+        {#    $('#new_post').val('');#}
+        {#    event.preventDefault();#}
+        {#    let href = "{{ url_for('posts.post_detail') }}";#}
+        {##}
+        {#    $.ajax({#}
+        {#        url: "http://127.0.0.1:5000/blog/qeqwe/comment/",#}
+        {#        data: formData,#}
+        {#        processData: false,#}
+        {#        contentType: false,#}
+        {#        type: 'POST',#}
+        {#comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id, role_for_comment=str(current_user.roles))#}
+        {#        success: function (response) {#}
+        {#            href = href.replace('1', response['username']);#}
+        {#            let a = $('<a></a>').attr('href', href).addClass('avatar');#}
+        {#            let img = $('<img></img>').attr('src', response['gravatar_url']);#}
+        {##}
+        {#            let paragraph = $('<p></p>').addClass('message-content').text(response['content']);#}
+        {#            let buttonDelete = $('<button></button>').attr('id', response['message_id']).attr('name', a.attr('href')).text('Удалить');#}
+        {#$('#ajax_ul').prepend($('22222'));#}
+        {#            $('#ajax_ul').prepend($('<li></li>').append(a.append(img)).append(paragraph.append(buttonDelete)));#}
+        {#        }#}
+        {#    })});#}
+    });
 </script>
 {% block title %}
     {{ post.title }}
 {% endblock %}
 
 {% block content_title %}
-    {{ post.title | safe }}
+    {#    {{ post.title | safe }}#}
 
 
 {% endblock %}
 
 {% block content %}
-<div id="content">
-<h1>
-{{ post.title | safe }}</h1>
-    <div class="tags">
-
-        {% for tag  in tags if tags != "Null"%}
-            <a href="{{ url_for('posts.tag_detail', slug=tag.slug)}}">
-                <span class="badge badge-pill badge-danger" style="text-decoration: none"> {{ tag.name }}</span></a>
-        {% endfor %}
-
-    </div>
-
-
-    <div class="main-content ">
-        <div id="content22" content="width=device-width, initial-scale=1 max-width: 400px">
-            {{ post.body | safe  }}
+    <div id="content">
+        <div class="header-h1">
+            <h1>
+                <a class="zag" href="{{ url_for('posts.post_detail', slug=post.slug)}}">
+                    {{ post.title | safe }}
+                </a>
+            </h1>
         </div>
-    </div>
+
+        <div class="main-content bor">
+            <div id="content22" content="width=device-width, initial-scale=1 max-width: 400px">
+                <h3>{{ post.body | safe  }}</h3> <hr>
+            </div>
+            <div class="tags">
+                {% if tags %}
+                    Tags: {% endif %}{% for tag in tags if tags != "Null"%}
+                <a href="{{ url_for('posts.tag_detail', slug=tag.slug)}}">
+                    <span class="badge badge-pill badge-danger" style="text-decoration: none"> {{ tag.name }}</span></a>
+            {% endfor %}
+
+            </div>
+            <br>
+            {% if current_user.has_role('moder') or current_user.has_role('admin') %}
+                <form method="LINK" action="{{ url_for('posts.edit_post', slug=post.slug) }}">
+                    <div class="col text-right">
+                        <input type="submit" value="Edit post" class="btn btn-danger">
+                        {#                {% if hash %}#}
+{#                        <a class="btn btn-info" href="{{ url_for('posts.post_detail', slug=post.slug)}}" role="button">Далее</a>#}
+                        {#                    {% endif %}#}
+                    </div>
+                </form>
+            {% endif %}
+        </div>
 
         <div class="bor">
             <div>
@@ -68,49 +85,49 @@
 
                 {% for comment in comments %}
                     <p>
-                        User: {{ comment[1].email }} <br>
-                        Role: {{ comment[2]}} <br>
-                        Comment: {{ comment[0].body }}
-                        {{ role_for_comment }}
-
+                    <h2>{{ comment[1].email }}</h2>
+                    Comment: {{ comment[0].body }}
                     </p>
+                    <hr>
                 {% endfor %}
-                        <form enctype="multipart/form-data" class="top">
-                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" >
-                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >
-                                <ul id="ajax_ul"></ul>
-                        </form>
+                <form action ="{{ url_for('posts.create_comment', slug=slug) }}" method="POST">
+                    <input type="text" placeholder="Leave comment" name="body" >
+
+                    <button type="submit" class="btn btn-success">Create</button>
+                </form>
+
+                {#                        <form enctype="multipart/form-data" class="top">#}
+                {#                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" method="POST">#}
+                {#                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >#}
+                {#                                <ul id="ajax_ul"></ul>#}
+                {#                        </form>#}
 
 
             </div>
-{#                                   {% if current_user.is_authenticated %}#}
-{#                        <form enctype="multipart/form-data" class="form-row" id="top">#}
-{#                            <form  form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}" class="form-inline"  >#}
-{#                                <div class="form-group col-sm-10">#}
-{#                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" >#}
-{#                                </div>#}
-{#                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >#}
-{#                            </form>#}
-{#                                <ul id="ajax_ul"></ul>#}
-{##}
-{##}
-{#                        </form>#}
-{##}
-{#                    {% endif %}#}
+            {#                                   {% if current_user.is_authenticated %}#}
+            {#                        <form enctype="multipart/form-data" class="form-row" id="top">#}
+            {#                            <form  form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}" class="form-inline"  >#}
+            {#                                <div class="form-group col-sm-10">#}
+            {#                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" >#}
+            {#                                </div>#}
+            {#                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >#}
+            {#                            </form>#}
+            {#                                <ul id="ajax_ul"></ul>#}
+            {##}
+            {##}
+            {#                        </form>#}
+            {##}
+            {#                    {% endif %}#}
         </div>
-        {% if current_user.has_role('moder') or current_user.has_role('admin') %}
-            <form method="LINK" action="{{ url_for('posts.edit_post', slug=post.slug) }}">
-                <input type="submit" value="Edit" class="btn btn-danger">
-            </form>
-        {% endif %}
+
     </div>
 
-        {% if current_user.is_authenticated %}
+    {% if current_user.is_authenticated %}
         <form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}">
             <input type="submit" value="Create comment" class="btn btn-warning">
         </form>
     {% endif %}
 
 
-</div>
+    </div>
 {% endblock %}

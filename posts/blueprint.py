@@ -127,34 +127,24 @@ def index():
     # posts = Post.query.join(Tag).filter(Post.id == Tag.post_id)
     else:
         posts = Post.query.order_by(Post.created.desc())
-    pages = posts.paginate(page=page, per_page=4)
+    pages = posts.paginate(page=page, per_page=5)
     return render_template('posts/index.html', posts=posts, pages=pages)
 
 
-@posts.route('<slug>')
+@posts.route('<slug>', methods=['GET', 'POST'])
 def post_detail(slug):
-    post = Post.query.filter(Post.slug == slug).first_or_404()
-    tags = Tag.query.filter(Tag.post_id == post.id).all()
-    # print(len(tags))
-    # if tags is not None:
-    # for tag in tags:
-        # print(tag.slug, tag.name)
-        # print(post.tags)
-    # tags = post.tags
-    comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
-    # if request.is_xhr:
-    #     post_det = {
-    #         "post": post,
-    #         "tags": tags,
-    #         "comment": comment_info
-    #         # "body": post.body,
-    #         # "title": post.title,
-    #         # "comment": comment_info,
-    #         # "tag": post.tags
-    #     }
-    #     return jsonify(post_det)
-    # print(comment_info)
-    return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
+    if request.method == "GET":
+        post = Post.query.filter(Post.slug == slug).first_or_404()
+        tags = Tag.query.filter(Tag.post_id == post.id).all()
+        comment_info = db.session.query(Comment, User).filter(Comment.post_id == post.id, Comment.user_id == User.id).all()
+        return render_template('posts/post_detail.html', post=post, tags=tags, comments=comment_info)
+    if request.method == 'POST':
+        post = Post.query.filter(Post.slug == slug).first_or_404()
+        if post:
+            comment = Comment(body=request.form['body'], post_id=post.id, user_id=current_user.id)
+            db.session.add(comment)
+            db.session.commit()
+            return redirect(url_for('posts.post_detail', slug=slug))
     # else:
     #     for tag in tags:
     #         print(tag.slug, tag.name)
@@ -186,7 +176,7 @@ def post_detail(slug):
 #             return redirect(url_for('posts.post_detail', slug=slug))
 #         else:
 #             return '400', 400
-
+#
 
 @posts.route('/tag/<slug>')
 def tag_detail(slug):

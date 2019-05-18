@@ -34,14 +34,36 @@ integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLP
         border: 1px solid black;
         padding: 5px 10px;
         border-radius: 10px;
-        margin: 5px 0px;
-        margin-top: 70px;}
+        margin: 5px 5px;
+        margin-top: 10px;}
 
 .sizeT
 {
     font-size: 50px;
 }
+.zag{
+    text-decoration: none;
+    color: #4ecfe9 !important;
 
+}
+.zag:hover{
+	text-decoration: none;
+    color: #4ecfe9 !important;
+
+
+}
+.zag:active{
+	text-decoration: none ;
+    color: #4ecfe9 !important;
+
+
+}
+.zag:visited{
+	text-decoration: none ;
+    color: #4ecfe9 !important;
+
+
+}
 .textfull
 {
 overflow-x:hidden;
@@ -50,6 +72,61 @@ overflow-x:hidden;
     {#border: 1px solid;#}
     {#padding: 50px;#}
     {#display: none;#}
+}
+
+.block:hover {
+    background-color: lightskyblue; /* Цвет ссылки при наведении на нее курсора мыши */
+    {#text-decoration: underline; /* Добавляем подчеркивание */#}
+
+}
+      .header-h1 {
+    position: relative;
+    margin-bottom: .5rem;
+  }
+
+  .header-h1 h1 {
+    font-size: 3rem;
+    margin-bottom: 0;
+    padding-left: 4rem;
+    color: #4ecfe9;
+  }
+  .header-h1 h1::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3.25rem;
+    height: 3.25rem;
+    background: #4ecfe9;
+  }
+  .header-h1 h1::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 3.25rem;
+    width: 100%;
+    height: .25rem;
+    background-color: #4ecfe9;
+  }
+
+
+    ::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #4ecfe9;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 </style>
 
