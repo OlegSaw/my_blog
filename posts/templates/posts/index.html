@@ -16,16 +16,24 @@
 
     <script>
         $(document).ready(function() {
+
+            // Check for hash value in URL
+            var hash = window.location.hash.substr(1);
+            console.log(hash);
+            if(hash.length > 0){
+                let slug = hash + ' #content';
+                $("#area").load(slug);
+                $(this).siblings('#area').slideToggle("slow");
+            }
             $('.block').on('click', '.extremum-click', function() {
                 let slug = $(this).attr("name") +' #content';
+                let url =  $(this).attr("name");
                 console.log(slug);
-                {#location.replace(slug);#}
+                window.location.hash = url;
                 $("#area").load(slug);
-                {#console.log($(this).parent().find('div').text());#}
-                {#$(this).parent().find('#area').text().slideToggle("fast");#}
                 $(this).siblings('#area').slideToggle("slow");
             });
-            {#delete href;#}
+
         });
     </script>
     <div class="container">
