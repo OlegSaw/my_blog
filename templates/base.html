@@ -73,7 +73,16 @@ overflow-x:hidden;
     {#padding: 50px;#}
     {#display: none;#}
 }
-
+#load {
+ display: none;
+ position: absolute;
+ right: 10px;
+ top: 10px;
+ background: url(images/ajax-loader.gif);
+ width: 43px;
+ height: 11px;
+ text-indent: -9999em;
+}
 .block:hover {
     background-color: lightskyblue; /* Цвет ссылки при наведении на нее курсора мыши */
     {#text-decoration: underline; /* Добавляем подчеркивание */#}
@@ -188,9 +197,11 @@ overflow-x:hidden;
          <a class="nav-link" href="{{ url_for('security.login') }}">Login <span class="sr-only">(current)</span></a>
       </li>
     {% endif %}
+    {% if  current_user.is_authenticated %}
     <li class="nav-item active">
          <a class="nav-link" href="{{ url_for('security.logout')  }} " >Logout <span class="sr-only">(current)</span></a>
       </li>
+    {% endif %}
     </ul>
 
     </ul>

@@ -15,12 +15,14 @@
             // Check for hash value in URL
             var hash = window.location;
             console.log(hash);
+            {#hash = hash.split("/");#}
+            {#console.log(hash);#}
             {#if(hash.length > 0){#}
             {#    let slug = hash + ' #content';#}
             {#    $("#area").load(slug);#}
             {#    $(this).siblings('#area').slideToggle("slow");}#}
             $('.block').on('click', '.extremum-click', function() {
-                let slug = "http://127.0.0.1:5000/blog/" + $(this).attr("name") +' #content';
+                let slug = "http://localhost:5000/blog/" + $(this).attr("name") +' #content'; {# http://127.0.0.1:5000/blog/ #}
                 {#let url =  $(this).attr("name");#}
                 {#console.log(slug);#}
                 {#window.location.hash = url;#}

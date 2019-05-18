@@ -90,34 +90,36 @@
                     </p>
                     <hr>
                 {% endfor %}
-                <form action="{{ url_for('posts.post_detail', slug=post.slug)}}" method="POST">
-                    <input type="text" placeholder="Leave comment" name="body" >
-
-                    <button type="submit" class="btn btn-success">Create</button>
-                </form>
-
-                {#                        <form enctype="multipart/form-data" class="top">#}
-                {#                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" method="POST">#}
-                {#                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >#}
-                {#                                <ul id="ajax_ul"></ul>#}
-                {#                        </form>#}
-
+{#                <form action="{{ url_for('posts.post_detail', slug=post.slug)}}" method="POST">#}
+{#                    <input type="text" placeholder="Leave comment" name="body" >#}
+{##}
+{#                    <button type="submit" class="btn btn-success">Create</button>#}
+{#                </form>#}
+{% if current_user.is_authenticated %}
+                                        <form enctype="multipart/form-data" class="form-row"   action="{{ url_for('posts.post_detail', slug=post.slug)}}" method="POST">
+                                         <div class="form-group col-sm-9">
+                                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" method="POST">
+                                         </div>
+                                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >
+                                                <ul id="ajax_ul"></ul>
+                                        </form>
+ {% endif %}
 
             </div>
-            {#                                   {% if current_user.is_authenticated %}#}
-            {#                        <form enctype="multipart/form-data" class="form-row" id="top">#}
-            {#                            <form  form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}" class="form-inline"  >#}
-            {#                                <div class="form-group col-sm-10">#}
-            {#                                    <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" >#}
-            {#                                </div>#}
-            {#                                <input type="submit" value="Create comment" class="btn btn-success mb-4" >#}
-            {#                            </form>#}
-            {#                                <ul id="ajax_ul"></ul>#}
-            {##}
-            {##}
-            {#                        </form>#}
-            {##}
-            {#                    {% endif %}#}
+
+{#                                    <form enctype="multipart/form-data" class="form-row" id="top">#}
+{#                                        <form  form method="LINK" action="{{ url_for('posts.create_comment', slug=post.slug) }}" class="form-inline"  >#}
+{#                                            <div class="form-group col-sm-9">#}
+{#                                                <input id="new_post" type="text" placeholder="Leave comment" name="body" class="form-control" >#}
+{#                                            </div>#}
+{#                                            <input type="submit" value="Create comment" class="btn btn-success mb-4" >#}
+{#                                        </form>#}
+{#                                            <ul id="ajax_ul"></ul>#}
+{##}
+{##}
+{#                                    </form>#}
+
+
         </div>
 
     </div>
